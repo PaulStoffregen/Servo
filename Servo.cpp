@@ -382,15 +382,22 @@ Servo::Servo()
 
 uint8_t Servo::attach(int pin)
 {
-	return attach(pin, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
+	return attach(pin, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH, true);
 }
 
-uint8_t Servo::attach(int pin, int minimum, int maximum)
+uint8_t Servo::attach(int pin, bool set)
+{
+  return attach(pin, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH, set);
+}
+
+uint8_t Servo::attach(int pin, int minimum, int maximum, bool set)
 {
 	if (servoIndex < MAX_SERVOS) {
 		pinMode(pin, OUTPUT);
 		servo_pin[servoIndex] = pin;
-		servo_ticks[servoIndex] = usToTicks(DEFAULT_PULSE_WIDTH);
+    if(set) {
+		  servo_ticks[servoIndex] = usToTicks(DEFAULT_PULSE_WIDTH);
+    }
 		servo_active_mask |= (1<<servoIndex);
 		min_ticks = usToTicks(minimum);
 		max_ticks = usToTicks(maximum);
